@@ -13,21 +13,18 @@ import ChatScreen from './activities/chat';
 import MiniGameScreen from './activities/miniGame';
 import optionsScreen from './activities/options';
 
-
-
-
-const SimpleApp = TabNavigator({
+const FullApp = TabNavigator({
   Home: { screen: MainScreen },
-  chat: { screen: ChatScreen },
-  game: { screen: MiniGameScreen },
-  options: { screen: optionsScreen }
+  Chat: { screen: ChatScreen },
+  Game: { screen: MiniGameScreen },
+  Options: { screen: optionsScreen }
 });
 
 
-export default class App extends Component<{}> {
+export default class App extends Component{
   render() {
     return (
-      <SimpleApp />
+      <FullApp />
     );
   }
 }
