@@ -29,7 +29,6 @@ export default class LogIn extends Component{
     super(props)
     const { navigation } = props
 
-
     this.state = {
       navigation,
       user: '',
@@ -42,11 +41,44 @@ export default class LogIn extends Component{
   }
   logInButton = function (event){
     console.log(this.state.navigation)
-    const { user, pass} = this.state
+    const { user, pass, remember} = this.state
     const { navigation } = this.props
 
-    //TODO do fetch to the server
-    redirect(navigation, 'App')
+    //TODO check and do fetch to the server termitavee.ddns.net:3000
+
+    fetch('http://termitavee.ddns.net:3000/logIn',
+      {
+        method: "POST",
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: JSON.stringify({user, pass, remember})
+      }).then(res=>res.json())
+      .then((res) => {
+          console.log(res)
+          if(res.status == 202){
+            
+
+              //TODO if remember, save it this.saveUser(res.user)
+              redirect(navigation, 'App')
+
+          }else{
+              switch(res.error){
+                case 'user':
+                      //TODO show there is a problem with the user
+                  break
+                case 'password':
+                      //TODO show there is a problem with the password
+                      break
+                default:
+                  //TODO another error
+              }
+          }
+
+      }).catch((error)=>{
+              //if bad use?
+
+              console.log('Request failed', error);
+              this.captcha = svgCaptcha.create()
+          })
   }
 
   render() {
