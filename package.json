@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "android":"react-native run-android",
+    "android": "react-native run-android",
     "adb": "adb reverse tcp:8081 tcp:8081",
-    "ios":"react-native run-ios",
-    "build-android":"react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "ios": "react-native run-ios",
+    "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "server": "react-native start",
     "test": "jest"
   },
