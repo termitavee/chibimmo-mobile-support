@@ -43,7 +43,7 @@ export default class LogIn extends Component{
     console.log(this.state.navigation)
     const { user, pass, remember} = this.state
     const { navigation } = this.props
-
+    //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
 
     fetch('http://termitavee.ddns.net:3000/logIn',
@@ -75,9 +75,8 @@ export default class LogIn extends Component{
 
       }).catch((error)=>{
               //if bad use?
-
-              console.log('Request failed', error);
-              this.captcha = svgCaptcha.create()
+        console.warn(error);
+              
           })
   }
 
