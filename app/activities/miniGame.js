@@ -25,13 +25,7 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
+          Minigame
         </Text>
       </View>
     );

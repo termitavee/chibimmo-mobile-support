@@ -16,4 +16,4 @@ const SplashStack = StackNavigator({
   App: { screen: App, navigationOptions },
 });
 
-AppRegistry.registerComponent('chibimmoMobileSupport', () => SplashStack);
+AppRegistry.registerComponent('Chibimmo', () => SplashStack);

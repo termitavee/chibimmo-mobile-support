@@ -46,7 +46,7 @@ export default class LogIn extends Component{
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
 
-    fetch('http://termitavee.ddns.net:3000/logIn',
+    fetch('http://192.168:3000/logIn',
       {
         method: "POST",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -74,7 +74,8 @@ export default class LogIn extends Component{
           }
 
       }).catch((error)=>{
-              //if bad use?
+        //if bad use?
+        console.warn('connection failed');
         console.warn(error);
               
           })

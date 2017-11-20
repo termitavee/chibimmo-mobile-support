@@ -1,4 +1,4 @@
-package com.chibimmomobilesupport;
+package com.chibimmo;
 
 import android.app.Application;
 

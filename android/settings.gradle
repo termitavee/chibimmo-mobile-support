@@ -1,4 +1,4 @@
-rootProject.name = 'chibimmoMobileSupport'
+rootProject.name = 'Chibimmo'
 include ':realm'
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 

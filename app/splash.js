@@ -42,8 +42,8 @@ export default class Splash extends Component{
     //get language from storange and save for etenity
 
     //user in local db? fetch server : redirect login
-    const token = db.previousLogIn()
-
+    //const token = db.previousLogIn()
+    const token = false
     if(token){
       //TODO do fetch to server with token
       redirect(navigation, 'App')
