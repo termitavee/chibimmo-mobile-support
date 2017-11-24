@@ -5,29 +5,75 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
+  TextInput,
+  ListView,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import SocketIO from 'socket.io-client';
+import Row from '../component/chatRow';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Welcome to chat screen'
   };
+
+  constructor(props) {
+    super(props);
+
+    const socket = SocketIO('http://localhost:3000')
+
+    socket.on('message', (message) => {
+      const { messages, dataSource} = this.state;
+      // React will automatically rerender the component when a new message is added.
+
+      const newMessages = oldMessages.concat([message])
+      this.setState({
+        messages: newMessages,
+        dataSource: dataSource.cloneWithRows(newMessages)
+      });
+
+    });
+    //TODO send user to server
+    const messages = [{ user: 'Admin', content: 'Welcome to the chat' }]
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    this.state = {
+      socket,
+      sendMessage: "",
+      messages,
+      dataSource: ds.cloneWithRows(messages),
+    }
+  }
+
+  send = () => {
+    //TODO get text and send
+    const { socket, sendMessage } = this.state
+    
+    socket.emit('message',sendMessage)
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          show chat
-        </Text>
-        
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(data) => <Row {...data}/>}
+        />
+
+        <View style={styles.sendBox}>
+
+          <TextInput
+            onChangeText={(sendMessage) => this.setState({ sendMessage })}
+            value={this.state.sendMessage}
+          />
+          <Button
+            title="Send"
+            onPress={this.send}
+          />
+        </View>
       </View>
     );
   }
@@ -58,5 +104,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  sendBox: {
+    flexDirection: 'row',
   },
 });

@@ -4,7 +4,8 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
@@ -20,9 +21,20 @@ class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Welcome to the main screen'
   };
+
+  exit = ()=>{
+    //TODO StackNavigator.goBack()
+    console.warn('exit?')
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Button
+          title="Log Out" 
+          onPress={this.exit}
+        />  
+          
         <Text style={styles.welcome}>
           print user information and news
         </Text>

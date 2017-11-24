@@ -27,6 +27,9 @@ class HomeScreen extends React.Component {
         <Text style={styles.welcome}>
           show options (notifications and stuff)
         </Text>
+        {/* 
+        server ip
+         */}
       </View>
     );
   }

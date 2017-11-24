@@ -21,8 +21,6 @@ import App from './app';
 
 //navigate('App')
 
-//login successfully? redirect app : redirect login
-
 export default class LogIn extends Component{
 
   constructor(props){
@@ -31,8 +29,8 @@ export default class LogIn extends Component{
 
     this.state = {
       navigation,
-      user: '',
-      pass: '',
+      user: 'termitavee',
+      pass: 'termitavee',
       remember: props.remember || false
     }
 
@@ -46,7 +44,7 @@ export default class LogIn extends Component{
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
 
-    fetch('http://192.168:3000/logIn',
+    fetch('http://192.168.1.144:3000/logIn',
       {
         method: "POST",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -94,13 +92,15 @@ export default class LogIn extends Component{
           <TextInput
             placeholder="Type your user name"
             autoFocus={true}
-            onChangeText={(user) => this.setState({user})}
+            onChangeText={(user) => this.setState({ user })}
+            value={this.state.user}
           />
           <Text>Password</Text>
           <TextInput
             placeholder="Type your password"
             secureTextEntry={true}
-            onChangeText={(pass) => this.setState({pass})}
+            onChangeText={(pass) => this.setState({ pass })}
+            value={this.state.pass}
           />
           <View style={{flexDirection: 'row'}}>
             <CheckBox
