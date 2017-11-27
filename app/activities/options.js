@@ -5,25 +5,44 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import { resetStack as redirect } from '../data/utils'
 
 class HomeScreen extends React.Component {
+
   static navigationOptions = {
     title: 'Welcome to options screen'
   };
+
+  constructor(props) {
+    super(props)
+    console.log('========== options.js ==========')
+    console.log(props)
+    this.state = {}
+
+    this.exit = this.exit.bind(this)
+
+  }
+
+  exit = () => {
+    //TODO StackNavigator.goBack()
+    console.warn('exit?')
+    const { navigation } = this.props
+    console.warn(navigation)
+    //redirect(navigation, 'App')
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Button
+          title="Log Out"
+          onPress={this.exit}
+        />
         <Text style={styles.welcome}>
           show options (notifications and stuff)
         </Text>

@@ -14,32 +14,31 @@ import {
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 
-import {resetStack as redirect} from './data/utils'
-
+import { resetStack as redirect } from './data/utils'
+import { setUser } from './data/db'
 //import views from activities
 import App from './app';
 
 //navigate('App')
 
-export default class LogIn extends Component{
+export default class LogIn extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     const { navigation } = props
-
     this.state = {
       navigation,
-      user: 'termitavee',
-      pass: 'termitavee',
+      user: 'root',
+      pass: 'root',
       remember: props.remember || false
     }
 
     this.logInButton = this.logInButton.bind(this)
 
   }
-  logInButton = function (event){
+  logInButton = function (event) {
     console.log(this.state.navigation)
-    const { user, pass, remember} = this.state
+    const { user, pass, remember } = this.state
     const { navigation } = this.props
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
@@ -47,36 +46,36 @@ export default class LogIn extends Component{
     fetch('http://192.168.1.144:3000/logIn',
       {
         method: "POST",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: JSON.stringify({user, pass, remember})
-      }).then(res=>res.json())
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: JSON.stringify({ user, pass, remember })
+      }).then(res => res.json())
       .then((res) => {
-          console.log(res)
-          if(res.status == 202){
-            
 
-              //TODO if remember, save it this.saveUser(res.user)
-              redirect(navigation, 'App')
+        if (res.status == 202) {
 
-          }else{
-              switch(res.error){
-                case 'user':
-                      //TODO show there is a problem with the user
-                  break
-                case 'password':
-                      //TODO show there is a problem with the password
-                      break
-                default:
-                  //TODO another error
-              }
+          //TODO if remember, save it this.saveUser(res.user)
+
+          setUser(res.user)
+          redirect(navigation, 'App', res.user)
+
+        } else {
+          switch (res.error) {
+            case 'user':
+              //TODO show there is a problem with the user
+              break
+            case 'password':
+              //TODO show there is a problem with the password
+              break
+            default:
+            //TODO another error
           }
+        }
 
-      }).catch((error)=>{
+      }).catch((error) => {
         //if bad use?
-        console.warn('connection failed');
         console.warn(error);
-              
-          })
+
+      })
   }
 
   render() {
@@ -102,11 +101,11 @@ export default class LogIn extends Component{
             onChangeText={(pass) => this.setState({ pass })}
             value={this.state.pass}
           />
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <CheckBox
-              onValueChange={(remember)=>this.setState({remember})}
-              />
-              <Text>remember</Text>
+              onValueChange={(remember) => this.setState({ remember })}
+            />
+            <Text>remember</Text>
           </View>
           <Button
             onPress={this.logInButton}

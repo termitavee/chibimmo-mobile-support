@@ -5,7 +5,7 @@ resetStack = (navigation, routeName, params) =>{
 
   navigation.dispatch(NavigationActions.reset({
     index: 0,
-    actions: [NavigationActions.navigate({ routeName })]
+    actions: [NavigationActions.navigate({ routeName, params })]
   }))
 }
 

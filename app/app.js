@@ -18,13 +18,12 @@ const FullApp = TabNavigator({
   Chat: { screen: ChatScreen },
   Game: { screen: MiniGameScreen },
   Options: { screen: optionsScreen }
-});
-
+})
 
 export default class App extends Component{
   render() {
     return (
-      <FullApp />
+      <FullApp screenProps={{ navigation: this.props.navigation }} asdf="asdfg"/>
     );
   }
 }

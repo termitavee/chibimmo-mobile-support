@@ -10,7 +10,7 @@ import {
 const Row = (props) => (
   <View style={styles.container}>
     <Text style={styles.text}>
-      {props.user+': '+props.content}
+      {props}
     </Text>
   </View>
 );
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     flexDirection: 'row',
-    
+
   },
   text: {
     marginLeft: 12,

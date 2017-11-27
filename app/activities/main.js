@@ -6,38 +6,55 @@ import {
   Text,
   View,
   Button,
+  ListView
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
+import { getUser } from '../data/db'
+import Row from '../component/characterRow';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
-class HomeScreen extends React.Component {
+class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Welcome to the main screen'
   };
+  constructor(props) {
+    super(props.screenProps)
+    console.log('========== main.js - constructor - this ==========')
+    console.log(props)
+    //const user =  getUser()
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-  exit = ()=>{
-    //TODO StackNavigator.goBack()
-    console.warn('exit?')
+    this.state = {
+      dataSource: ds.cloneWithRows([]),
+    }
+
+    console.log('========== main.js - getUser ==========')
+    console.log(getUser())
+    /*   .then(function (user, error) {
+      console.log(user)
+      console.log(error)
+      this.setState({
+        user
+      });
+      this.state.dataSource.cloneWithRows(user.characters) 
+    })  */
+    //TODO if not valid do something
+
   }
 
   render() {
+    console.log('========== main.js - constructor - this ==========')
+
     return (
-      <View style={styles.container}>
-        <Button
-          title="Log Out" 
-          onPress={this.exit}
-        />  
-          
+      <View style={styles.container}>        
         <Text style={styles.welcome}>
           print user information and news
         </Text>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(data) => <Row {...data} />}
+        />
       </View>
     );
   }
