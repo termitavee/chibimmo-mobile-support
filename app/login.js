@@ -30,7 +30,8 @@ export default class LogIn extends Component {
       navigation,
       user: 'root',
       pass: 'root',
-      remember: props.remember || false
+      remember: props.remember || false,
+      serverIP: "127.0.0.1"
     }
 
     this.logInButton = this.logInButton.bind(this)
@@ -79,11 +80,8 @@ export default class LogIn extends Component {
   }
 
   render() {
-    //ActivityIndicator
-    //Button
-    //Text
-    //TextInput
-    //View
+
+    
     return (
       <View>
         <View>

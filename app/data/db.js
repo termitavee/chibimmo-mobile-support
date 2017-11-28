@@ -70,3 +70,28 @@ export function getUser() {
   });
 
 }
+export function setIP(ip) {
+
+  AsyncStorage.setItem('ip', JSON.stringify(ip), (error) => {
+    if (error == null)
+      console.log('saved')
+    else
+      console.log(error)
+
+  });
+
+}
+
+export function getIP() {
+
+  AsyncStorage.getItem('ip', (error, found) => {
+    if (found) {
+      console.log('found')
+      return JSON.parse(found)
+
+    } else
+      console.log(error)
+
+
+  });
+}
