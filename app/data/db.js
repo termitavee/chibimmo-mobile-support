@@ -43,10 +43,14 @@ try {
 
  
 */
+export const USER = '0'
+export const IP = '1'
+
+
 import { AsyncStorage } from 'react-native';
 export function setUser(user) {
 
-  AsyncStorage.setItem('user', JSON.stringify(user), (error) => {
+  AsyncStorage.setItem(USER, JSON.stringify(user), (error) => {
     if (error == null)
       console.log('saved')
     else
@@ -56,23 +60,9 @@ export function setUser(user) {
 
 }
 
-export function getUser() {
-
-  AsyncStorage.getItem('user', (error, found) => {
-    if (found) {
-      console.log('found')
-      return JSON.parse(found)
-
-    } else
-      console.log(error)
-
-
-  });
-
-}
 export function setIP(ip) {
 
-  AsyncStorage.setItem('ip', JSON.stringify(ip), (error) => {
+  AsyncStorage.setItem(IP, JSON.stringify(ip), (error) => {
     if (error == null)
       console.log('saved')
     else
@@ -80,18 +70,4 @@ export function setIP(ip) {
 
   });
 
-}
-
-export function getIP() {
-
-  AsyncStorage.getItem('ip', (error, found) => {
-    if (found) {
-      console.log('found')
-      return JSON.parse(found)
-
-    } else
-      console.log(error)
-
-
-  });
 }

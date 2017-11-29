@@ -7,7 +7,7 @@ import {
   Image
 } from 'react-native';
 
-const Row = (props) => (
+export const Row = (props) => (
   <View style={styles.container}>
     <Text style={styles.text}>
       {props}
@@ -32,5 +32,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-
-export default Row;

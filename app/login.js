@@ -10,12 +10,14 @@ import {
   TextInput,
   ActivityIndicator,
   Button,
-  CheckBox
+  CheckBox,
+  AsyncStorage
+
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 
 import { resetStack as redirect } from './data/utils'
-import { setUser } from './data/db'
+import { setUser, setIP, IP } from './data/db'
 //import views from activities
 import App from './app';
 
@@ -26,38 +28,48 @@ export default class LogIn extends Component {
   constructor(props) {
     super(props)
     const { navigation } = props
+
     this.state = {
       navigation,
       user: 'root',
       pass: 'root',
       remember: props.remember || false,
-      serverIP: "127.0.0.1"
+      serverIP: '127.0.0.1'
     }
+
+    AsyncStorage.getItem(IP, (error, found) => {
+      if (!error) this.setState({ serverIP: JSON.parse(found) })
+    })
+    console.log('========== login.js - constructor - getIP(this) ==========')
+
 
     this.logInButton = this.logInButton.bind(this)
 
   }
   logInButton = function (event) {
-    console.log(this.state.navigation)
+
+    console.log('========== login.js - button - state ==========')
+    console.log(this.state)
     const { user, pass, remember } = this.state
     const { navigation } = this.props
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
 
-    fetch('http://192.168.1.144:3000/logIn',
+    fetch('http://' + this.state.serverIP + ':3000/logIn',
       {
         method: "POST",
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: JSON.stringify({ user, pass, remember })
       }).then(res => res.json())
       .then((res) => {
-
+        console.log('got Reasponse')
+        setIP(this.state.serverIP)
         if (res.status == 202) {
 
           //TODO if remember, save it this.saveUser(res.user)
 
           setUser(res.user)
-          redirect(navigation, 'App', res.user)
+          redirect(navigation, 'App', { navigation, ...res.user })
 
         } else {
           switch (res.error) {
@@ -80,8 +92,6 @@ export default class LogIn extends Component {
   }
 
   render() {
-
-    
     return (
       <View>
         <View>
@@ -110,6 +120,12 @@ export default class LogIn extends Component {
             title="Log In"
           />
         </View>
+        <Text>Server url or ip</Text>
+        <TextInput
+          placeholder="server"
+          onChangeText={(serverIP) => this.setState({ serverIP })}
+          value={this.state.serverIP}
+        />
 
         <Text>more info</Text>
       </View>

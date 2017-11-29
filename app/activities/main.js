@@ -6,11 +6,12 @@ import {
   Text,
   View,
   Button,
-  ListView
+  ListView,
+  AsyncStorage
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-import { getUser } from '../data/db'
+import { getUser, USER } from '../data/db'
 import Row from '../component/characterRow';
 
 
@@ -19,10 +20,9 @@ class HomeScreen extends Component {
     title: 'Welcome to the main screen'
   };
   constructor(props) {
-    super(props.screenProps)
+    super(props)
     console.log('========== main.js - constructor - this ==========')
     console.log(props)
-    //const user =  getUser()
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
@@ -30,16 +30,16 @@ class HomeScreen extends Component {
     }
 
     console.log('========== main.js - getUser ==========')
-    console.log(getUser())
-    /*   .then(function (user, error) {
-      console.log(user)
-      console.log(error)
-      this.setState({
-        user
-      });
-      this.state.dataSource.cloneWithRows(user.characters) 
-    })  */
-    //TODO if not valid do something
+    AsyncStorage.getItem('ip', (error, found) => {
+      if (!error) {
+        this.setState({ user: JSON.parse(found) })
+        this.state.dataSource.cloneWithRows(found.characters)
+      } else {
+
+        //TODO if not valid do something. Redirect(?)
+      }
+
+    })
 
   }
 
@@ -47,7 +47,7 @@ class HomeScreen extends Component {
     console.log('========== main.js - constructor - this ==========')
 
     return (
-      <View style={styles.container}>        
+      <View style={styles.container}>
         <Text style={styles.welcome}>
           print user information and news
         </Text>

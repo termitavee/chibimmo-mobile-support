@@ -22,6 +22,7 @@ const FullApp = TabNavigator({
 
 export default class App extends Component{
   render() {
+    
     return (
       <FullApp screenProps={{ navigation: this.props.navigation }} asdf="asdfg"/>
     );
