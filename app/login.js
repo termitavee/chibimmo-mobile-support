@@ -16,12 +16,8 @@ import {
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 
-import { resetStack as redirect } from './data/utils'
+import { resetStack } from './data/utils'
 import { setUser, setIP, IP } from './data/db'
-//import views from activities
-import App from './app';
-
-//navigate('App')
 
 export default class LogIn extends Component {
 
@@ -30,15 +26,15 @@ export default class LogIn extends Component {
     const { navigation } = props
 
     this.state = {
-      navigation,
       user: 'root',
       pass: 'root',
       remember: props.remember || false,
-      serverIP: '127.0.0.1'
+      serverIP: '192.168.1.144'
     }
 
     AsyncStorage.getItem(IP, (error, found) => {
-      if (!error) this.setState({ serverIP: JSON.parse(found) })
+      console.log(found)
+      if (found) this.setState({ serverIP: JSON.parse(found) })
     })
     console.log('========== login.js - constructor - getIP(this) ==========')
 
@@ -46,10 +42,11 @@ export default class LogIn extends Component {
     this.logInButton = this.logInButton.bind(this)
 
   }
+
   logInButton = function (event) {
 
     console.log('========== login.js - button - state ==========')
-    console.log(this.state)
+
     const { user, pass, remember } = this.state
     const { navigation } = this.props
     //TODO check empty fields
@@ -64,12 +61,16 @@ export default class LogIn extends Component {
       .then((res) => {
         console.log('got Reasponse')
         setIP(this.state.serverIP)
+        console.log('ip saved')
+        //setRootNav(navigation)
         if (res.status == 202) {
 
           //TODO if remember, save it this.saveUser(res.user)
 
           setUser(res.user)
-          redirect(navigation, 'App', { navigation, ...res.user })
+
+          console.log('ip saved')
+          navigation.dispatch(resetStack('App'))
 
         } else {
           switch (res.error) {
@@ -92,6 +93,12 @@ export default class LogIn extends Component {
   }
 
   render() {
+    console.log('==========  login.js - render - this.props and state========== ')
+    //props [ 'screenProps', 'navigation' ]
+    //state [ 'user', 'pass', 'remember', 'serverIP' ]
+    console.log(Object.keys(this.props))
+    console.log(this.props.screenProps)
+    //console.log(Object.keys(this.state))
     return (
       <View>
         <View>

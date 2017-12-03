@@ -15,27 +15,13 @@ import { StackNavigator, NavigationActions } from 'react-navigation';
 
 //import necesary data
 import {LogInDataBase as db} from './data/db'
-import {resetStack as redirect} from './data/utils'
-
-//import views from activities
-import App from './app';
-import LogIn from './login';
-
-const SplashStack = StackNavigator({
-  LogIn: { screen: LogIn },
-  App: { screen: App },
-});
+import {resetStack } from './data/utils'
 
 export default class Splash extends Component{
-  static navigationOptions = {
+/*   static navigationOptions = {
     drawerLabel: 'Splash.js',
     title: 'Splash.js',
-  }
-
-  constructor(props){
-    super(props)
-    //this.checkUser()
-  }
+  } */
 
   async checkUser(){
     const {navigation} = this.props
@@ -46,16 +32,12 @@ export default class Splash extends Component{
     const token = false
     if(token){
       //TODO do fetch to server with token
-      redirect(navigation, 'App')
+      navigation.dispatch(resetStack('App'))
 
     }
 
-    redirect(navigation, 'LogIn')
-    /*navigation.navigate('LogIn', {navigation}, NavigationActions.reset({
-      index: 0,
-      actions: NavigationActions.navigate({ routeName: 'LogIn'})
-    }))
-*/
+    navigation.dispatch(resetStack('LogIn'))
+
   }
   componentDidMount(){
     this.checkUser()
@@ -64,7 +46,7 @@ export default class Splash extends Component{
   render() {
     return (
       <View>
-        <Image source={require('./img/icon.jpg')} style={{width: 320, height: 320}} />
+       {/*  <Image source={require('./img/icon.jpg')} style={{width: 320, height: 320}} /> */}
         <ActivityIndicator/>
         <Text>Loading app</Text>
       </View>

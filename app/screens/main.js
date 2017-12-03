@@ -16,24 +16,30 @@ import Row from '../component/characterRow';
 
 
 class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Welcome to the main screen'
-  };
+
   constructor(props) {
     super(props)
-    console.log('========== main.js - constructor - this ==========')
+    console.log('========== main.js - constructor - props ==========')
+    console.log('props')
     console.log(props)
+    console.log('this')
+    console.log(this)
+
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
       dataSource: ds.cloneWithRows([]),
     }
 
-    console.log('========== main.js - getUser ==========')
-    AsyncStorage.getItem('ip', (error, found) => {
-      if (!error) {
-        this.setState({ user: JSON.parse(found) })
-        this.state.dataSource.cloneWithRows(found.characters)
+    AsyncStorage.getItem(USER, (error, found) => {
+
+      console.log('========== main.js - getUser ==========')
+      const parseFound = (JSON.parse(found))
+
+      if (found) {
+        this.setState({ navigator: parseFound })
+
+        this.state.dataSource.cloneWithRows(parseFound.characters)
       } else {
 
         //TODO if not valid do something. Redirect(?)
@@ -44,8 +50,12 @@ class HomeScreen extends Component {
   }
 
   render() {
-    console.log('========== main.js - constructor - this ==========')
+    console.log('========== main.js - render - Object.keys(this) ==========')
+    console.log(Object.keys(this))
+    console.log(Object.keys(this.props))
 
+
+    //['props', 'context', 'refs', 'updater', 'state', '_reactInternalFiber', '_reactInternalInstance']
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -61,7 +71,7 @@ class HomeScreen extends Component {
 }
 
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   render() {
     return (
       <HomeScreen />

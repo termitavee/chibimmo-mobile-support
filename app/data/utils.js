@@ -1,15 +1,15 @@
 //statics generic functions
-import {  NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 
-resetStack = (navigation, routeName, params) =>{
+export const resetStack = (routeName) => {
 
-  navigation.dispatch(NavigationActions.reset({
+  return (NavigationActions.reset({
     index: 0,
-    actions: [NavigationActions.navigate({ routeName, params })]
+    actions: [NavigationActions.navigate({ routeName })]
   }))
 }
+/* resetStack = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName, params })]
+}) */
 
-
-
-
-export {resetStack}

@@ -14,25 +14,10 @@ import { resetStack as redirect } from '../data/utils'
 
 class HomeScreen extends React.Component {
 
-  static navigationOptions = {
-    title: 'Welcome to options screen'
-  };
-
-  constructor(props) {
-    super(props)
-    console.log('========== options.js ==========')
-    console.log(props)
-    this.state = {}
-
-    this.exit = this.exit.bind(this)
-
-  }
-
   exit = () => {
     //TODO StackNavigator.goBack()
     console.warn('exit?')
-    const { navigation } = this.props
-    console.warn(navigation)
+    console.log(this.props)
     //redirect(navigation, 'App')
   }
 
@@ -55,7 +40,7 @@ class HomeScreen extends React.Component {
 }
 
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   render() {
     return (
       <HomeScreen />

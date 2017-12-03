@@ -1,5 +1,3 @@
-//connect to the server and get messages to the user
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -15,9 +13,7 @@ import SocketIO from 'socket.io-client';
 import Row from '../component/chatRow';
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome to chat screen'
-  };
+
 
   constructor(props) {
     super(props);
