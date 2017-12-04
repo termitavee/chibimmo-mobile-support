@@ -7,47 +7,94 @@ import {
   Button,
   TextInput,
   ListView,
+  AsyncStorage
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import SocketIO from 'socket.io-client';
-import Row from '../component/chatRow';
+import { Row } from '../component/chatRow';
+import { IP, USER } from '../data/db'
 
-class HomeScreen extends React.Component {
-
+export default class App extends Component {
 
   constructor(props) {
     super(props);
-
-    const socket = SocketIO('http://localhost:3000')
-
-    socket.on('message', (message) => {
-      const { messages, dataSource} = this.state;
-      // React will automatically rerender the component when a new message is added.
-
-      const newMessages = oldMessages.concat([message])
-      this.setState({
-        messages: newMessages,
-        dataSource: dataSource.cloneWithRows(newMessages)
-      });
-
-    });
-    //TODO send user to server
-    const messages = [{ user: 'Admin', content: 'Welcome to the chat' }]
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      socket,
+      user: {},
+      socket: {},
+      message: {},
       sendMessage: "",
-      messages,
-      dataSource: ds.cloneWithRows(messages),
+      dataSource: ds.cloneWithRows([]),
     }
+    AsyncStorage.getItem(USER, (error, found) => {
+      
+      this.setState({ user: JSON.parse(found) })
+    })
+    AsyncStorage.getItem(IP, (error, found) => {
+
+      const socket = SocketIO(
+        'http://' + JSON.parse(found) + ':3000/chat',
+        {
+          pingTimeout: 30000,
+          allowUpgrades: false,
+          cookie: false
+        })
+
+      socket.on('connect', () => {
+        console.log('chat conection')
+        const messages = [{ user: 'Admin', content: 'Welcome to the chat' }]
+        //TODO this.updateDataSource
+        this.setState({
+          messages,
+          dataSource: this.state.dataSource.cloneWithRows(messages)
+        })
+      })
+
+      socket.on('newMessage', (message) => {
+        console.log('new message')
+        console.log(message)
+        const { messages, dataSource } = this.state;
+
+        const newMessages = [...messages, message]
+        this.setState({
+          messages: newMessages,
+          sendMessage:"",
+          dataSource: dataSource.cloneWithRows(newMessages)
+        })
+
+      })
+
+      this.setState({ socket })
+    })
+
+    this.send = this.send.bind(this);
+
+
+  }
+
+  updateDataSource(newMessages) {
+    const { messages, dataSource } = this.state;
+    const updated = [...messages, newMessages]
+    this.setState({
+      messages: updated,
+      dataSource: dataSource.cloneWithRows(newMessages)
+    })
   }
 
   send = () => {
-    //TODO get text and send
-    const { socket, sendMessage } = this.state
     
-    socket.emit('message',sendMessage)
+    const { messages, dataSource, sendMessage, user, socket } = this.state;
+    console.log('========== chat.js - send - this.state.user ==========')
+    console.log(user)
+    const message = { user: user._id, content: sendMessage }
+    console.log(message)
+    const newMessages = [...messages, message]
+    this.setState({
+      messages: newMessages,
+      dataSource: dataSource.cloneWithRows(newMessages)
+    })
+    socket.emit('message', message)
 
   }
 
@@ -55,13 +102,15 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ListView
+          enableEmptySections={true}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data}/>}
+          renderRow={(rowData) => <Row {...rowData} />}
         />
 
         <View style={styles.sendBox}>
 
           <TextInput
+            style={styles.allWidth}
             onChangeText={(sendMessage) => this.setState({ sendMessage })}
             value={this.state.sendMessage}
           />
@@ -75,33 +124,20 @@ class HomeScreen extends React.Component {
   }
 }
 
-
-export default class App extends Component<{}> {
-  render() {
-    return (
-      <HomeScreen />
-    );
-  }
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    /* justifyContent: 'center', */
+    /* alignItems: 'center', */
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  messagesBox: {
+    flex: 1
   },
   sendBox: {
     flexDirection: 'row',
   },
+  allWidth: {
+    flex: 1
+  }
 });

@@ -33,10 +33,11 @@ export default class LogIn extends Component {
     }
 
     AsyncStorage.getItem(IP, (error, found) => {
+
+      console.log('========== login.js - constructor - getIP(this) ==========')
       console.log(found)
       if (found) this.setState({ serverIP: JSON.parse(found) })
     })
-    console.log('========== login.js - constructor - getIP(this) ==========')
 
 
     this.logInButton = this.logInButton.bind(this)
@@ -47,21 +48,21 @@ export default class LogIn extends Component {
 
     console.log('========== login.js - button - state ==========')
 
-    const { user, pass, remember } = this.state
+    const { user, pass, remember, serverIP } = this.state
+    console.log(serverIP)
     const { navigation } = this.props
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
 
-    fetch('http://' + this.state.serverIP + ':3000/logIn',
+    fetch('http://' + serverIP + ':3000/logIn',
       {
         method: "POST",
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: JSON.stringify({ user, pass, remember })
       }).then(res => res.json())
       .then((res) => {
-        console.log('got Reasponse')
+        console.log('========== login.js - fetch - res.user ==========')
         setIP(this.state.serverIP)
-        console.log('ip saved')
         //setRootNav(navigation)
         if (res.status == 202) {
 
@@ -93,12 +94,6 @@ export default class LogIn extends Component {
   }
 
   render() {
-    console.log('==========  login.js - render - this.props and state========== ')
-    //props [ 'screenProps', 'navigation' ]
-    //state [ 'user', 'pass', 'remember', 'serverIP' ]
-    console.log(Object.keys(this.props))
-    console.log(this.props.screenProps)
-    //console.log(Object.keys(this.state))
     return (
       <View>
         <View>

@@ -1,22 +1,23 @@
+import React, { Component } from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation'
+
 import MainScreen from '../screens/main'
 import ChatScreen from '../screens/chat'
 import MiniGameScreen from '../screens/miniGame'
-import optionsScreen from '../screens/options'
+import OptionsScreen from '../screens/options'
 
 import Splash from '../splash'
 import LogIn from '../login'
 
-/* const navigationOptions = ({ navigation }) => ({
-  headerMode: 'none',
-  header: null
-}) */
+//routes names
+export const LOGIN = 'LogIn'
+export const APP = 'App'
 
 const AppStack = TabNavigator({
   Home: { screen: MainScreen },
   Chat: { screen: ChatScreen },
   Game: { screen: MiniGameScreen },
-  Options: { screen: optionsScreen }
+  Options: { screen: OptionsScreen }
 })
 
 export const SplashStack = StackNavigator({
@@ -27,6 +28,15 @@ export const SplashStack = StackNavigator({
       headerMode: 'none',
       header: null
     }
- });
+  }
+);
+
+export const resetStack = (routeName) => {
+
+  return (NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName })]
+  }))
+}
 
 

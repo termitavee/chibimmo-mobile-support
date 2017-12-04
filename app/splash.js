@@ -14,7 +14,6 @@ import {
 import { StackNavigator, NavigationActions } from 'react-navigation';
 
 //import necesary data
-import {LogInDataBase as db} from './data/db'
 import {resetStack } from './data/utils'
 
 export default class Splash extends Component{

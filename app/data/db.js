@@ -7,7 +7,7 @@ export function setUser(user) {
 
   AsyncStorage.setItem(USER, JSON.stringify(user), (error) => {
     if (error == null)
-      console.log('saved')
+      console.log('user saved')
     else
       console.log(error)
 
@@ -19,7 +19,7 @@ export function setIP(ip) {
 
   AsyncStorage.setItem(IP, JSON.stringify(ip), (error) => {
     if (error == null)
-      console.log('saved')
+      console.log('ip saved')
     else
       console.log(error)
 

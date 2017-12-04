@@ -6,63 +6,90 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  AsyncStorage,
+  TextInput
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-import { resetStack as redirect } from '../data/utils'
-
-class HomeScreen extends React.Component {
-
-  exit = () => {
-    //TODO StackNavigator.goBack()
-    console.warn('exit?')
-    console.log(this.props)
-    //redirect(navigation, 'App')
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Button
-          title="Log Out"
-          onPress={this.exit}
-        />
-        <Text style={styles.welcome}>
-          show options (notifications and stuff)
-        </Text>
-        {/* 
-        server ip
-         */}
-      </View>
-    );
-  }
-}
+import { resetStack } from '../data/utils'
+import { setUser, setIP, IP } from '../data/db'
 
 
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      serverIP: ''
+    }
+
+    AsyncStorage.getItem(IP, (error, found) => {
+
+      console.log('========== options.js - AsyncStorage - getIP ==========')
+      console.log(found)
+      if (found) this.setState({ serverIP: JSON.parse(found) })
+    })
+  }
+  exit = () => {
+    this.props.navigation.dispatch(resetStack('LogIn'))
+  }
+
+  save = () => {
+    setIP(this.state.serverIP)
+  }
+//[styles.row, styles.right ]
   render() {
     return (
-      <HomeScreen />
+      <View style={styles.container}>
+        
+        <View style={[styles.row, styles.right]}>
+          <Button
+            title="Log Out"
+            onPress={this.exit}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={{ textAlignVertical: 'center'}}>
+            Change server'server IP
+        </Text>
+          <TextInput
+            style={{ height: 40 }}
+            autoCorrect={false}
+            maxLength={15}
+            onChangeText={(serverIP) => this.setState({ serverIP })}
+            onBlur={this.save}
+            value={this.state.serverIP}
+          />
+        </View>
+
+        <View style={[styles.row, styles.center]}>
+          <Button
+            title="Save"
+            onPress={this.save}
+          />
+        </View>
+
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 10,
+    flex: 1,    
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  row: {
+    paddingTop:5,
+    flexDirection: 'row',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  right: {
+    justifyContent: 'flex-end',
   },
+  center: {
+    justifyContent: 'center',
+  },
+
 });

@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-class HomeScreen extends React.Component {
-
+export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -18,15 +17,6 @@ class HomeScreen extends React.Component {
           Minigame
         </Text>
       </View>
-    );
-  }
-}
-
-
-export default class App extends Component {
-  render() {
-    return (
-      <HomeScreen />
     );
   }
 }

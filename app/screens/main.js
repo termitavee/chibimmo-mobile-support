@@ -12,69 +12,57 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 import { getUser, USER } from '../data/db'
-import Row from '../component/characterRow';
+import {Row} from '../component/characterRow';
 
-
-class HomeScreen extends Component {
-
+export default class App extends Component {
   constructor(props) {
     super(props)
-    console.log('========== main.js - constructor - props ==========')
-    console.log('props')
-    console.log(props)
-    console.log('this')
-    console.log(this)
 
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
+      user: {},
       dataSource: ds.cloneWithRows([]),
-    }
+    } 
 
     AsyncStorage.getItem(USER, (error, found) => {
 
-      console.log('========== main.js - getUser ==========')
+      console.log('========== main.js - getUser - characters ==========')
       const parseFound = (JSON.parse(found))
+      console.log(parseFound)
+
+      console.log('========== main.js - getUser - this.state ==========')
 
       if (found) {
-        this.setState({ navigator: parseFound })
+        this.setState({ user: parseFound })
+        console.log('saved user  ')
+        const { dataSource } = this.state
+        this.setState({
+          user: parseFound,
+          dataSource: dataSource.cloneWithRows(parseFound.characters)
+        }) 
+      
 
-        this.state.dataSource.cloneWithRows(parseFound.characters)
       } else {
-
         //TODO if not valid do something. Redirect(?)
       }
-
     })
-
   }
 
   render() {
-    console.log('========== main.js - render - Object.keys(this) ==========')
-    console.log(Object.keys(this))
-    console.log(Object.keys(this.props))
-
-
-    //['props', 'context', 'refs', 'updater', 'state', '_reactInternalFiber', '_reactInternalInstance']
+    const {_id } = this.state
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          print user information and news
+          Welcome {_id}
         </Text>
+
         <ListView
+          enableEmptySections={true}   
           dataSource={this.state.dataSource}
           renderRow={(data) => <Row {...data} />}
         />
       </View>
-    );
-  }
-}
-
-
-export default class App extends Component {
-  render() {
-    return (
-      <HomeScreen />
     );
   }
 }
