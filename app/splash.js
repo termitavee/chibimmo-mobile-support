@@ -9,44 +9,69 @@ import {
   TextInput,
   ActivityIndicator,
   Button,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 import { StackNavigator, NavigationActions } from 'react-navigation';
 
 //import necesary data
-import {resetStack } from './data/utils'
+import { REMEMBER } from './data/db'
+import { resetStack } from './data/utils'
 
-export default class Splash extends Component{
-/*   static navigationOptions = {
-    drawerLabel: 'Splash.js',
-    title: 'Splash.js',
-  } */
+export default class Splash extends Component {
 
-  async checkUser(){
-    const {navigation} = this.props
-    //get language from storange and save for etenity
-
-    //user in local db? fetch server : redirect login
-    //const token = db.previousLogIn()
-    const token = false
-    if(token){
-      //TODO do fetch to server with token
-      navigation.dispatch(resetStack('App'))
-
-    }
-
-    navigation.dispatch(resetStack('LogIn'))
-
+  constructor(props) {
+    super(props)
+    this.checkUser(props)
   }
-  componentDidMount(){
-    this.checkUser()
+  async checkUser(props) {
+    const { navigation } = props
+    //get language from storange and save for etenity
+    AsyncStorage.getItem(REMEMBER, (tokenFound) => {
+      //tokenFound = {user, token, device, date}
+      if (!tokenFound)
+        navigation.dispatch(resetStack('LogIn'))
+      else {
+        AsyncStorage.getItem(IP, (error, serverIP) => {
+
+          if (serverIP) {
+            fetch('http://' + JSON.parse(serverIP) + ':3000/logIn',
+              {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: JSON.stringify({ ...(JSON.parse(tokenFound)), remember: true })
+              }).then(res => res.json())
+              .then((res) => {
+                console.log('========== login.js - fetch - res.user ==========')
+                //setRootNav(navigation)
+                if (res.status == 202) {
+
+                  //TODO if remember, save it this.saveUser(res.user)
+
+                  setUser(res.user)
+                  console.log('ip saved')
+                  navigation.dispatch(resetStack('App'))
+
+                } else {
+                  navigation.dispatch(resetStack('LogIn'))
+
+                }
+
+              }).catch((error) => {
+                navigation.dispatch(resetStack('LogIn'))
+              })
+          }
+        })
+      }
+    })
+
   }
 
   render() {
     return (
       <View>
-       {/*  <Image source={require('./img/icon.jpg')} style={{width: 320, height: 320}} /> */}
-        <ActivityIndicator/>
+        {/*  <Image source={require('./img/icon.jpg')} style={{width: 320, height: 320}} /> */}
+        <ActivityIndicator />
         <Text>Loading app</Text>
       </View>
     );

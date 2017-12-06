@@ -14,10 +14,11 @@ import {
   AsyncStorage
 
 } from 'react-native';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation'
+import DeviceInfo  from 'react-native-device-info'
 
 import { resetStack } from './data/utils'
-import { setUser, setIP, IP } from './data/db'
+import { setUser, setIP, IP, setremember } from './data/db'
 
 export default class LogIn extends Component {
 
@@ -67,7 +68,11 @@ export default class LogIn extends Component {
         if (res.status == 202) {
 
           //TODO if remember, save it this.saveUser(res.user)
-
+          if (remember) {
+            //{user, token, device}
+            const device = DeviceInfo.getUniqueID()	
+            setremember({user: user._id, token, device})
+          }
           setUser(res.user)
 
           console.log('ip saved')
