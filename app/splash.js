@@ -24,6 +24,7 @@ export default class Splash extends Component {
     super(props)
     this.checkUser(props)
   }
+  
   async checkUser(props) {
     const { navigation } = props
     //get language from storange and save for etenity

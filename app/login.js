@@ -24,13 +24,15 @@ export default class LogIn extends Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     const { navigation } = props
 
     this.state = {
       user: 'root',
       pass: 'root',
-      remember: props.remember || false,
-      serverIP: '192.168.1.144'
+      remember: false,
+      serverIP: '192.168.1.144',
+      waiting:false
     }
 
     AsyncStorage.getItem(IP, (error, found) => {
@@ -50,11 +52,11 @@ export default class LogIn extends Component {
     console.log('========== login.js - button - state ==========')
 
     const { user, pass, remember, serverIP } = this.state
-    console.log(serverIP)
+    console.log(this.state)
     const { navigation } = this.props
     //TODO check empty fields
     //TODO check and do fetch to the server termitavee.ddns.net:3000
-
+    this.setState({ waiting: true})
     fetch('http://' + serverIP + ':3000/logIn',
       {
         method: "POST",
@@ -79,6 +81,7 @@ export default class LogIn extends Component {
           navigation.dispatch(resetStack('App'))
 
         } else {
+          this.setState({ waiting: false })
           switch (res.error) {
             case 'user':
               //TODO show there is a problem with the user
@@ -93,12 +96,14 @@ export default class LogIn extends Component {
 
       }).catch((error) => {
         //if bad use?
+        this.setState({ waiting: false })
         console.warn(error);
 
       })
   }
 
   render() {
+    //TODO use waiting to disable/enable all elements
     return (
       <View>
         <View>
